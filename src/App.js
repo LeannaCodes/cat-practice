@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from 'react';
+import axios from "axios";
+import "./App.css";
+import CatList from './CatList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      catData: [],
+    };
+  }
+
+  getCats = async () => {
+    const cats = await axios.get("http://localhost:3001/cats");
+    this.setState({ catData: cats.data });
+    console.log(cats.data)
+  };
+  render() {
+    return (
+      <div className="App">
+        {this.state.catData && 
+        <CatList catData = {this.state.catData}/>}
+        <button onClick={this.getCats}>Get the cats bro!</button>
+      </div>
+    );
+  }
 }
 
 export default App;
